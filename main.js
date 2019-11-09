@@ -6,7 +6,19 @@ function initMap() {
   var map = new google.maps.Map(document.getElementById("map"), opts);
 
   map.addListener('click', function(e) {
+    getAddress(e.latLng);
     getLatLng(e.latLng, map)
+  });
+}
+
+function getAddress(latLng) {
+  var geocoder = new google.maps.Geocoder();
+  geocoder.geocode({
+    latLng: latLng
+  }, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK && results[0].geometry) {
+      document.getElementById('address').textContent = results[0].formatted_address.replace(/^日本、/, '');
+    }
   });
 }
 
