@@ -10,11 +10,11 @@ function initMap() {
     getLatLng(e.latLng, map);
 
     var marker = new google.maps.Marker({
-      position: latLng,
+      position: e.latLng,
       map: map
     });
 
-    map.panTo(latLng);
+    map.panTo(e.latLng);
   });
 }
 
