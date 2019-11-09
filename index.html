@@ -10,6 +10,8 @@
   <li>住所: <span id="address"></span></li>
 </ul>
 
+<input type="button" value="現在位置の取得" onclick="fetchPresentLocation()">
+
 <script>
   var sc = document.createElement('script');
   sc.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapApiToken}&callback=initMap`;

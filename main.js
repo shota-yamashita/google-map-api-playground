@@ -7,7 +7,14 @@ function initMap() {
 
   map.addListener('click', function(e) {
     getAddress(e.latLng);
-    getLatLng(e.latLng, map)
+    getLatLng(e.latLng, map);
+
+    var marker = new google.maps.Marker({
+      position: latLng,
+      map: map
+    });
+
+    map.panTo(latLng);
   });
 }
 
@@ -22,14 +29,38 @@ function getAddress(latLng) {
   });
 }
 
-function getLatLng(latLng, map) {
+function getLatLng(latLng, map = null) {
   document.getElementById('lat').textContent = latLng.lat();
   document.getElementById('lng').textContent = latLng.lng();
+}
 
-  var marker = new google.maps.Marker({
-    position: latLng,
-    map: map
-  });
-
-  map.panTo(latLng);
+function fetchPresentLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      function(position) {
+        var mapLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        getAddress(mapLatLng);
+        getLatLng(mapLatLng, null);
+      },
+      function(error) {
+        switch(error.code) {
+          case 1: // PERMISSION_DENIED
+            alert("位置情報の利用が許可されていません");
+            break;
+          case 2: // POSITION_UNAVAILABLE
+            alert("現在位置が取得できませんでした");
+            break;
+          case 3: // TIMEOUT
+            alert("タイムアウトになりました");
+            break;
+          default:
+            alert("その他のエラー(エラーコード:"+error.code+")");
+            break;
+        }
+      }
+    );
+  // Geolocation APIに対応していない
+  } else {
+    alert("この端末では位置情報が取得できません");
+  }
 }
